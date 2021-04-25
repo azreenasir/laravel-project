@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function show($slug)
+    public function index()
     {
-        return view('posts.show', compact('slug'));
+        return view('posts.index', [
+            'posts' => Post::paginate(5),
+        ]);
+    }
+
+    public function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
     }
 }
