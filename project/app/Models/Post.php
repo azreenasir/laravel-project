@@ -9,8 +9,15 @@ class Post extends Model
 {
     use HasFactory;
 
-    public function scopeLatestFirst()
-    {
-        return $this->latest()->first();
-    }
+    /* more protected than guarded method as another user cant
+        edit the content such as id */
+
+    protected $fillable = ['title', 'slug', 'body'];
+
+
+    /* use when only we can update and post the content on the server
+        because another user can edit the content if using guarded method */
+
+
+    // protected $guarded = [];
 }
