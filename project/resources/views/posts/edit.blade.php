@@ -12,27 +12,7 @@
                         <form action="/posts/{{$post->slug}}/edit" method="POST">
                             @method('patch')
                             @csrf
-                            <div class="form-group">
-                                <Label for="title">Title</Label>
-                                <input type="text" value="{{ old('title') ?? $post->title}}" name="title" id="title" class="form-control">
-                                @error('title')
-                                    <div class="mt-2 text-danger">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <Label for="body">Body</Label>
-                                <textarea name="body" id="body" class="form-control">{{ old('body') ?? $post->body}}</textarea>
-                                @error('body')
-                                    <div class="mt-2 text-danger">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            @include('posts.partials.form-control')
                         </form>
                     </div>
 
