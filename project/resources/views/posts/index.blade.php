@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container">
-    <div class="d-flex justify-content-between">
+    <div class="">
         <div>
             @isset($category)
             <h3>Category: {{$category->name}}</h3>
@@ -19,49 +19,77 @@
             @endif
             <hr>
         </div>
-        <div>
-            <a href="/posts/create" class="btn btn-primary">New Post</a>
-        </div>
+        
     </div>
-    
     <div class="row">
-        @forelse ($posts as $post)
-            <div class="col-md-4">
+        <div class="col-md-7">
+            @forelse ($posts as $post)
                 <div class="card mb-4">
-                    <div class="card-header">
-                        {{$post->title}}
-
-                    </div>
+                    @if ($post->thumbnail)
+                    <a href="{{ route('posts.show', $post->slug)}}">
+                        <img style="height: 400px; object-fit: cover; object-position: center;" class="card-img-top" src="{{ $post->takeImage }}"> 
+                    
+                    @endif
 
                     <div class="card-body">
                         <div>
-                            {{ Str::limit($post->body,100, '.')}}
+                            <a href="{{route('categories.show', $post->category->slug) }}" class="text-secondary">
+                                <small>
+                                    {{ $post->category->name }} - 
+                                </small>
+                            </a>
+
+                            @foreach ($post->tags as $tag)
+                                <a href="{{route('tags.show', $tag->slug) }}" class="text-secondary">
+                                    <small>
+                                        {{ $tag->name }}
+                                    </small>
+                                </a>
+                            @endforeach
+                        </div>
+                        <h5>
+                            <a class="text-dark" href="{{ route('posts.show', $post->slug)}}" class="card-title">
+                                {{$post->title}}
+    
+                            </a>
+                        </h5>
+                        
+                        <div class="text-secodary my-3">
+                            {{ Str::limit($post->body,130, '.')}}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+
+                            <div class="media align-items-center">
+                                <img width="40" class="rounded-circle mr-3" src="{{ $post->user->gravatar()}}" alt="">
+                                <div class="media-body">
+                                    <div>
+                                        {{ $post->user->name}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-secondary">
+                                <small>
+                                    Published on {{ $post->created_at->diffForHumans()}}
+                                </small>                            
+                            </div>
                         </div>
 
-                        <a href="/posts/{{$post->slug}}" class="text-decoration-none">Read more</a>
-                    </div>
-
-                    <div class="card-footer d-flex justify-content-between">
-                        Published on {{ $post->created_at->diffForHumans()}}
-                        <a href="/posts/{{$post->slug}}/edit" class="btn btn-sm btn-success">Edit</a>
                     </div>
                 </div>
+            @empty
+            <div class="col-md-6">
+                <div class="alert alert-info">
+                    There are no post.
+                </div>
             </div>
-        @empty
-        <div class="col-md-6">
-            <div class="alert alert-info">
-                There are no post.
-            </div>
+            @endforelse
         </div>
-            
-        @endforelse
     </div>
-    <div class="d-flex justify-content-center">
-        <div>
+
+
     {{$posts->links()}}
 
-        </div>
-    </div>
 </div>
 
 @stop

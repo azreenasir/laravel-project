@@ -12,8 +12,9 @@ class Post extends Model
     /* more protected than guarded method as another user cant
         edit the content such as id */
 
-    protected $fillable = ['title', 'slug', 'body', 'category_id'];
+    protected $fillable = ['title', 'slug', 'body', 'category_id', 'thumbnail'];
 
+    protected $with = ['user', 'category','tags'];
 
     /* use when only we can update and post the content on the server
         because another user can edit the content if using guarded method */
@@ -30,5 +31,15 @@ class Post extends Model
     public function tags()
     {
         return $this->BelongsToMany(Tag::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getTakeImageAttribute()
+    {
+        return "/storage/" . $this->thumbnail;
     }
 }
